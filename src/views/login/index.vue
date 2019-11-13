@@ -65,14 +65,18 @@ export default {
           { pattern: /^\d{6}$/, message: '您输入的验证码有误,请确认后输入' }
         ],
         // checked: [{ type: 'array', message: '请阅读协议后勾选', trigger: 'change' }]
-        checked: [{ validator: (rule, value, callback) => {
-          // rule 为当前规则     value代表checked的值   callback 回调函数
-          if (value) {
-            callback()
-          } else {
-            callback(new Error('请阅读协议后勾选'))
+        checked: [
+          {
+            validator: (rule, value, callback) => {
+              // rule 为当前规则     value代表checked的值   callback 回调函数
+              if (value) {
+                callback()
+              } else {
+                callback(new Error('请阅读协议后勾选'))
+              }
+            }
           }
-        } }]
+        ]
       }
     }
   },
@@ -94,9 +98,20 @@ export default {
       }
     },
     loginSubmit () {
-      this.$refs.loginForm.validate(function (isSuccess) {
+      this.$refs.loginForm.validate(isSuccess => {
         if (isSuccess) {
-          console.log(isSuccess) // 校验成功返回true
+          // console.log(isSuccess) // 校验成功返回true
+          this.$axios
+            .post('/authorizations', this.loginForm)
+            .then(res => {
+              localStorage.setItem('token', res.data.data.token)
+              this.$router.push('/home')
+            }).catch(res => {
+              this.$message({
+                message: '查无此号，请重新输入',
+                type: 'error'
+              })
+            })
         }
       })
     }
