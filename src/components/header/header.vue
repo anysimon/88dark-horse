@@ -31,8 +31,9 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>个人信息</el-dropdown-item>
               <el-dropdown-item>git地址</el-dropdown-item>
-              <template><el-divider style="margin:0"></el-divider></template>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <!-- <template><el-divider style="margin:0"></el-divider></template> -->
+              <!-- 给组件注册事件需要修饰符 .native -->
+              <el-dropdown-item @click.native='logOff'>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -65,6 +66,26 @@ export default {
         this.userInfo = res.data.data
       }).catch(err => {
         console.log(err)
+      })
+    },
+    // 退出功能  element-ui MessageBox 弹框
+    logOff () {
+      this.$confirm('确定退出吗', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+        window.localStorage.removeItem('token')
+        this.$router.push('/login')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
       })
     }
   }
