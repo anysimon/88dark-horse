@@ -60,3 +60,19 @@ const router = new VueRouter({
 })
 
 export default router
+
+// 控制页面访问权限  Vue-router 导航守卫
+router.beforeEach((to, from, next) => {
+  // to 即将要进入的路由对象 地址  to.path 可以获取地址
+  // from 当前导航正要离开的地址
+  // next 放行
+  if (to.path === '/login') {
+    return next()
+  }
+  const token = window.localStorage.getItem('token')
+  if (token) {
+    next()
+  } else {
+    next('/login')
+  }
+})
