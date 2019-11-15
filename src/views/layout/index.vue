@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import leftNav from './left-Nav'
-import Header from './header'
+import leftNav from '../layout/left-Nav'
+import Header from '@/components/header/header'
 export default {
   components: {
     'el-aside': leftNav,

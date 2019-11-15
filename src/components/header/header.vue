@@ -61,7 +61,7 @@ export default {
         url: '/user/profile',
         headers: { 'Authorization': `Bearer ${token}` } // 请求参数
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.userInfo = res.data.data
       }).catch(err => {
         console.log(err)

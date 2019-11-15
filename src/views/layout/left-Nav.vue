@@ -3,9 +3,9 @@
     <div class="logo">
       <img src="../../assets/img/logo_admin.png" alt />
     </div>
-    <el-menu background-color="#323745" text-color="#adafb5" active-text-color="#ffd04b" style="width:201px">
+    <el-menu background-color="#323745" text-color="#adafb5" active-text-color="#ffd04b" style="width:201px" router>
       <!-- 一级列表 -->
-      <el-menu-item index="1">
+      <el-menu-item index="/">
         <span slot="title">首页</span>
       </el-menu-item>
       <!-- 二级菜单 -->
@@ -14,10 +14,10 @@
           <span>内容管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1">发布文章</el-menu-item>
-          <el-menu-item index="2-2">内容列表</el-menu-item>
-          <el-menu-item index="2-3">评论列表</el-menu-item>
-          <el-menu-item index="2-4">素材管理</el-menu-item>
+          <el-menu-item index="/publish">发布文章</el-menu-item>
+          <el-menu-item index="/article">内容列表</el-menu-item>
+          <el-menu-item index="/comment">评论列表</el-menu-item>
+          <el-menu-item index="/image">素材管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <!-- 二级菜单 -->
@@ -31,7 +31,7 @@
         </el-menu-item-group>
       </el-submenu>
       <!-- 一级列表 -->
-      <el-menu-item index="4">
+      <el-menu-item index="/account">
         <span slot="title">账户信息</span>
       </el-menu-item>
     </el-menu>
