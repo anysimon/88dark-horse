@@ -105,7 +105,7 @@ export default {
             .post('/authorizations', this.loginForm)
             .then(res => {
               localStorage.setItem('token', res.data.data.token)
-              this.$router.push('/home')
+              this.$router.push('/')
             }).catch(res => {
               this.$message({
                 message: '查无此号，请重新输入',
