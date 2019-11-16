@@ -60,10 +60,10 @@
           </template>
         </el-table-column>
         <el-table-column prop="pubdate" label="发布日期" align='center'></el-table-column>
-        <el-table-column prop="edit" label="操作" align='center'>
-          <template>
+        <el-table-column prop="id" label="操作" align='center'>
+          <template slot-scope="scope">
              <el-button type="primary" size="mini">编辑</el-button>
-             <el-button type="danger" size="mini">删除</el-button>
+             <el-button type="danger" size="mini" @click='deleteAarticle(scope.row.id)'>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,13 +84,15 @@ export default {
     return {
       filterForm: {
         status: null,
-        channel_id: null
+        channel_id: null,
+        id: ''
       },
       rangeDate: '', // 日期
       total_count: 0, // 总页数
       loading: true, // 控制加载组件的开启关闭
       channels: [], // 频道列表
       articles: [], // 文章列表
+      page: '',
       articlesStatus: [
         {
           type: 'info',
@@ -131,8 +133,10 @@ export default {
           page, // 文章页数
           status: this.filterForm.status, // 文章状态
           channel_id: this.filterForm.channel_id, // 频道ID
-          begin_pubdate: this.rangeDate[0], // 起始日期
-          rangeDate: this.rangeDate[1] // 截止日期
+          // 当日期被手动删除的时候，this.rangeDate 就为null 了  此时再取下标就会报错
+          // 所以这里需要手动校验判断,如果this.rangeDate为空时 就不取下标 直接为null
+          begin_pubdate: this.rangeDate ? this.rangeDate[0] : null, // 起始日期
+          rangeDate: this.rangeDate ? this.rangeDate[1] : null // 截止日期
         }
       }).then(res => {
         // console.log(res)
@@ -156,6 +160,25 @@ export default {
       this.$axios.get('/channels').then(res => {
         // console.log(res)
         this.channels = res.data.data.channels
+      })
+    },
+    // 删除功能
+    deleteAarticle (id) {
+      // console.log(JSON.stringify(id))
+      const token = window.localStorage.getItem('token')
+      this.$axios({
+        method: 'DELETE',
+        url: `/articles/${id}`,
+        headers: {
+          // token格式 Bearer token
+          // Bearer 有个空格
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        // console.log(res)
+        this.loadArticles()
+      }).catch(err => {
+        console.log(err, '删除失败')
       })
     }
   }
