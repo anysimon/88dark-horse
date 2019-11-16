@@ -27,6 +27,7 @@
             <el-date-picker
               v-model="rangeDate"
               type="daterange"
+              value-format="yyyy-MM-dd"
               range-separator="-"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -83,10 +84,7 @@ export default {
     return {
       filterForm: {
         status: null,
-        channel_id: null,
-        begin_pubdate: '',
-        end_pubdate: ''
-        // results: []
+        channel_id: null
       },
       rangeDate: '', // 日期
       total_count: 0, // 总页数
@@ -132,7 +130,9 @@ export default {
         params: {
           page, // 文章页数
           status: this.filterForm.status, // 文章状态
-          channel_id: this.filterForm.channel_id // 频道ID
+          channel_id: this.filterForm.channel_id, // 频道ID
+          begin_pubdate: this.rangeDate[0], // 起始日期
+          rangeDate: this.rangeDate[1] // 截止日期
         }
       }).then(res => {
         // console.log(res)
@@ -149,7 +149,7 @@ export default {
     },
     // 查询文章
     searchList () {
-      this.loadArticles(1)
+      this.loadArticles()
     },
     // 获取频道
     getChannels () {
