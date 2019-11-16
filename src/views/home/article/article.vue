@@ -46,7 +46,7 @@
       <div slot="header" class="clearfix">
         <span>共找到{{total_count}}条符合条件的内容</span>
       </div>
-      <el-table :data="filterForm.results" style="width: 100%;text-align: center">
+      <el-table :data="filterForm.results" style="width: 100%;text-align: center" v-loading="loading">
         <el-table-column prop="imges" label="封面" width="180">
           <template slot-scope="scope">
             <!-- secope.row 就是遍历项  相当于每一项 item -->
@@ -70,6 +70,12 @@
         </el-table-column>
       </el-table>
       </el-card>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change = 'getPage'
+        :total="total_count">
+      </el-pagination>
   </div>
 </template>
 
@@ -87,6 +93,7 @@ export default {
       },
       rangeDate: '',
       total_count: 0,
+      loading: true,
       articlesStatus: [
         {
           type: '',
@@ -112,11 +119,12 @@ export default {
     }
   },
   created () {
-    this.loadArticles()
+    this.loadArticles(1)
   },
   methods: {
     // 调用接口
-    loadArticles () {
+    loadArticles (page = 1) {
+      this.loading = true
       const token = window.localStorage.getItem('token')
       this.$axios({
         url: '/articles',
@@ -124,13 +132,22 @@ export default {
           // token格式 Bearer token
           // Bearer 有个空格
           Authorization: `Bearer ${token}`
+        },
+        params: {
+          page
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.filterForm = res.data.data
         this.articles = res.data.data.results
         this.total_count = res.data.data.total_count
+      }).finally(res => {
+        this.loading = false
       })
+    },
+    // 点击页数页面变化
+    getPage (page) {
+      this.loadArticles(page)
     }
   }
 }
@@ -142,5 +159,9 @@ export default {
 }
 .search{
   padding: 0px;
+}
+.el-pagination{
+  text-align: center;
+  margin: 20px;
 }
 </style>
