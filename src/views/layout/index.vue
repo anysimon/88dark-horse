@@ -1,9 +1,9 @@
 <template>
   <el-container>
     <!-- 左侧导航 -->
-    <el-aside></el-aside>
+    <el-aside class="leftNav"></el-aside>
     <!-- 右侧模块 -->
-    <el-container>
+    <el-container class="main">
       <el-header></el-header>
       <el-main>
         <!-- 二级路由容器 -->
@@ -26,4 +26,17 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.el-container{
+  background-color: #f2f3f5;
+  .el-main{
+    padding: 10px;
+  }
+  .leftNav{
+    position: fixed;
+    z-index: 1;
+  }
+  .main{
+    margin-left: 200px;
+  }
+}
 </style>

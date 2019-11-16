@@ -97,6 +97,7 @@ export default {
   height: 50px;
   line-height: 50px;
   padding: 0 10px;
+  background-color: #fff;
   .el-icon-s-unfold {
     font-size: 20px;
     vertical-align: middle;
