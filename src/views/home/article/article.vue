@@ -5,24 +5,21 @@
         <span>全部图文</span>
       </div>
       <!-- ---------------------- -->
-      <el-form ref="form" label-width="80px">
+      <el-form label-width="80px">
         <el-form-item label="文章状态">
           <el-radio-group v-model="filterForm.status">
-            <el-radio label="">全部</el-radio>
-            <el-radio label="0">草稿</el-radio>
-            <el-radio label="1">待审核</el-radio>
-            <el-radio label="2">审核通过</el-radio>
-            <el-radio label="3">审核失败</el-radio>
-            <el-radio label="4">已删除</el-radio>
+            <el-radio :label="null" value='全部'>全部</el-radio>
+            <el-radio label="0" value='草稿' v-model="filterForm.status">草稿</el-radio>
+            <el-radio label="1" value='待审核' v-model="filterForm.status">待审核</el-radio>
+            <el-radio label="2" value='审核通过' v-model="filterForm.status">审核通过</el-radio>
+            <el-radio label="3" value='审核失败' v-model="filterForm.status">审核失败</el-radio>
+            <el-radio label="4" value='已删除' v-model="filterForm.status">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="活动区域">
+        <el-form-item label="频道列表">
           <el-select placeholder="请选择" v-model="filterForm.channel_id">
-            <el-option label="开发者咨询" value="开发者咨询"></el-option>
-            <el-option label="ios" value="ios"></el-option>
-            <el-option label="c++" value="c++"></el-option>
-            <el-option label="android" value="android"></el-option>
-            <el-option label="css" value="css"></el-option>
+            <el-option label="所有频道" :value="null"></el-option>
+            <el-option v-for='item in channels' :key='item.id' :label='item.name' :value='item.id'></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -37,7 +34,7 @@
           </template>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click='searchList(1)'>查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -46,23 +43,23 @@
       <div slot="header" class="clearfix">
         <span>共找到{{total_count}}条符合条件的内容</span>
       </div>
-      <el-table :data="filterForm.results" style="width: 100%;text-align: center" v-loading="loading">
-        <el-table-column prop="imges" label="封面" width="180">
+      <el-table :data="articles" style="width: 100%;text-align: center" v-loading="loading">
+        <el-table-column prop="imges" label="封面" width="180" align='center'>
           <template slot-scope="scope">
             <!-- secope.row 就是遍历项  相当于每一项 item -->
             <img width="50" :src="scope.row.cover.images[0]">
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="标题" width="220"></el-table-column>
-        <el-table-column prop="articlesStatus" label="状态">
+        <el-table-column prop="title" label="标题" width="220" align='center'></el-table-column>
+        <el-table-column prop="status" label="状态" align='center'>
           <template slot-scope="scope">
             <el-tag
-            :type='articlesStatus[scope.row.status].type' size="small">
+            :type='articlesStatus[scope.row.status].type'>
             {{ articlesStatus[scope.row.status].label }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="pubdate" label="发布日期"></el-table-column>
-        <el-table-column prop="edit" label="操作" style="text-align: center">
+        <el-table-column prop="pubdate" label="发布日期" align='center'></el-table-column>
+        <el-table-column prop="edit" label="操作" align='center'>
           <template>
              <el-button type="primary" size="mini">编辑</el-button>
              <el-button type="danger" size="mini">删除</el-button>
@@ -81,35 +78,33 @@
 
 <script>
 export default {
-  name: 'data',
+  name: 'article_data',
   data () {
     return {
       filterForm: {
-        status: '',
-        channel_id: '',
+        status: null,
+        channel_id: null,
         begin_pubdate: '',
         end_pubdate: ''
         // results: []
       },
-      rangeDate: '',
-      total_count: 0,
-      loading: true,
+      rangeDate: '', // 日期
+      total_count: 0, // 总页数
+      loading: true, // 控制加载组件的开启关闭
+      channels: [], // 频道列表
+      articles: [], // 文章列表
       articlesStatus: [
-        {
-          type: '',
-          label: '全部'
-        },
         {
           type: 'info',
           label: '草稿'
         },
         {
-          type: 'success',
-          label: '审核通过'
-        },
-        {
           type: 'warning',
           label: '待审核'
+        },
+        {
+          type: 'success',
+          label: '审核通过'
         },
         {
           type: 'danger',
@@ -120,9 +115,10 @@ export default {
   },
   created () {
     this.loadArticles(1)
+    this.getChannels()
   },
   methods: {
-    // 调用接口
+    // 渲染页面调用接口
     loadArticles (page = 1) {
       this.loading = true
       const token = window.localStorage.getItem('token')
@@ -134,7 +130,9 @@ export default {
           Authorization: `Bearer ${token}`
         },
         params: {
-          page
+          page, // 文章页数
+          status: this.filterForm.status, // 文章状态
+          channel_id: this.filterForm.channel_id // 频道ID
         }
       }).then(res => {
         // console.log(res)
@@ -148,6 +146,17 @@ export default {
     // 点击页数页面变化
     getPage (page) {
       this.loadArticles(page)
+    },
+    // 查询文章
+    searchList () {
+      this.loadArticles(1)
+    },
+    // 获取频道
+    getChannels () {
+      this.$axios.get('/channels').then(res => {
+        // console.log(res)
+        this.channels = res.data.data.channels
+      })
     }
   }
 }
