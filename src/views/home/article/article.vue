@@ -200,6 +200,11 @@ export default {
       }).catch(err => {
         console.log(err, '删除失败')
       })
+    },
+    // 编辑功能
+    editArticle (id) {
+      // console.log(id)
+      this.$router.push(`/publish?${id}`)
     }
   },
   // 在Vue实例创建完成后调用获取文章列表并渲染到页面

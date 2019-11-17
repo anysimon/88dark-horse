@@ -57,6 +57,7 @@ export default {
         },
         channel_id: ''
       },
+      id: '',
       channels: [] // 获取频道
     }
   },
@@ -70,21 +71,50 @@ export default {
     },
     // 发表文章
     onSubmit (draft) {
-      this.$axios({
-        method: 'POST',
-        url: '/articles',
-        params: { draft }, // Query参数
-        data: this.PublishForm
-      }).then(res => {
+      if (this.id) {
+        this.$axios({
+          method: 'PUT',
+          url: `articles/${this.id}`,
+          params: { draft },
+          data: this.PublishForm
+        }).then(res => {
+          // console.log(res)
+          this.$router.push('/article')
+        }).catch(err => {
+          console.log(err, '编辑失败')
+        })
+      } else {
+        this.$axios({
+          method: 'POST',
+          url: '/articles',
+          params: { draft }, // Query参数
+          data: this.PublishForm
+        }).then(res => {
         // console.log(res)
-        this.$router.push('/article')
-      }).catch(err => {
-        console.log(err)
-      })
+          this.$router.push('/article')
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    },
+    // 获取文章
+    getAriticle () {
+      if (window.location.href.split('?')[1]) {
+        this.id = window.location.href.split('?')[1]
+        this.$axios({
+          url: `/articles/${this.id}`
+        }).then(res => {
+        // console.log(res)
+          this.PublishForm = res.data.data
+        }).catch(err => {
+          console.log(err, '获取文章失败')
+        })
+      }
     }
   },
   created () {
     this.getChannels()
+    this.getAriticle()
   }
 }
 </script>
