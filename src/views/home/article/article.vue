@@ -132,16 +132,16 @@ export default {
     getArticle (page) {
       // console.log(page)
       this.loading = true
-      const token = window.localStorage.getItem('token')
+      // const token = window.localStorage.getItem('token')
       this.$axios({
         url: '/articles',
         // 在这个项目中，除了/login不需要token  其他的都需要token  否则报错401
         // 提交token 需要先在本地存储中获取到登录时提交的token 然后在请求头中携带提交
         // token提交格式  按照接口文档 headers 以对象的格式 Authorization: `Bearer ${token}`
         // 需要注意的是 Bearer 后面有个空格！！！！！！！
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // },
         // Query参数
         params: {
           page,
@@ -187,13 +187,13 @@ export default {
     // 删除功能
     deleteArticle (id) {
       // console.log(JSON.parse(id))
-      const token = window.localStorage.getItem('token')
+      // const token = window.localStorage.getItem('token')
       this.$axios({
         method: 'DELETE',
-        url: `/articles/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        url: `/articles/${id}`
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // }
       }).then(res => {
         // console.log(res)
         this.getArticle(this.current_page)

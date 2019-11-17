@@ -45,7 +45,7 @@ export default {
       loginForm: {
         mobile: '',
         code: '',
-        checked: false
+        checked: true
       },
       show: true, // 初始启用按钮
       count: '', // 初始化次数
