@@ -57,7 +57,6 @@ export default {
         },
         channel_id: ''
       },
-      id: '',
       channels: [] // 获取频道
     }
   },
@@ -71,10 +70,10 @@ export default {
     },
     // 发表文章
     onSubmit (draft) {
-      if (this.id) {
+      if (this.$route.params.articleId) {
         this.$axios({
           method: 'PUT',
-          url: `articles/${this.id}`,
+          url: `articles/${this.$route.params.articleId}`,
           params: { draft },
           data: this.PublishForm
         }).then(res => {
@@ -99,22 +98,22 @@ export default {
     },
     // 获取文章
     getAriticle () {
-      if (window.location.href.split('?')[1]) {
-        this.id = window.location.href.split('?')[1]
-        this.$axios({
-          url: `/articles/${this.id}`
-        }).then(res => {
+      this.$axios({
+        url: `/articles/${this.$route.params.articleId}`
+      }).then(res => {
         // console.log(res)
-          this.PublishForm = res.data.data
-        }).catch(err => {
-          console.log(err, '获取文章失败')
-        })
-      }
+        this.PublishForm = res.data.data
+      }).catch(err => {
+        console.log(err, '获取文章失败')
+      })
     }
   },
   created () {
+    // console.log(this.$route.params.articleId)
+    if (this.$route.params.articleId) {
+      this.getAriticle()
+    }
     this.getChannels()
-    this.getAriticle()
   }
 }
 </script>

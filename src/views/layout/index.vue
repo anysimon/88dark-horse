@@ -1,14 +1,15 @@
 <template>
   <el-container>
     <!-- 左侧导航 -->
-    <el-aside class="leftNav"></el-aside>
+    <div style="width: 200px">
+       <el-aside class="leftNav"></el-aside>
+    </div>
     <!-- 右侧模块 -->
-    <el-container class="main">
+    <el-container>
       <el-header></el-header>
       <el-main>
         <!-- 二级路由容器 -->
-
-        <router-view>main</router-view>
+        <router-view :key='$route.path'>main</router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -25,7 +26,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
 .el-container{
   background-color: #f2f3f5;
   .el-main{
@@ -34,9 +35,6 @@ export default {
   .leftNav{
     position: fixed;
     z-index: 1;
-  }
-  .main{
-    margin-left: 200px;
   }
 }
 </style>

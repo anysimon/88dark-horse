@@ -13,6 +13,7 @@ Vue.prototype.$axios = axios // axios 赋值给全局属性
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 Vue.config.productionTip = false
 Vue.use(elementUI)
+
 // 解决id过长的报错
 axios.defaults.transformResponse = [function (data) {
   // Do whatever you want to transform the data

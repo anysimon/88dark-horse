@@ -1,6 +1,6 @@
 <template>
   <div>
-      素材管理
+      评论详情页
   </div>
 </template>
 

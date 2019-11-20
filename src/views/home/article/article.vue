@@ -70,10 +70,10 @@
         <el-table-column prop="pubdate" label="发布日期" align="center"></el-table-column>
         <el-table-column prop="edit" label="操作" align="center">
           <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click='editArticle(scope.row.id)'>编辑</el-button>
-          <el-button type="danger" size="mini" @click='deleteArticle(scope.row.id)'>删除</el-button>
+            <!-- 动态路由 -->
+            <el-button type="primary" size="mini" @click="$router.push('/publish/' + scope.row.id)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteArticle(scope.row.id)">删除</el-button>
           </template>
-
         </el-table-column>
       </el-table>
       <el-pagination
@@ -200,12 +200,12 @@ export default {
       }).catch(err => {
         console.log(err, '删除失败')
       })
-    },
-    // 编辑功能
-    editArticle (id) {
-      // console.log(id)
-      this.$router.push(`/publish?${id}`)
     }
+    // 编辑功能
+    //   editArticle (id) {
+    //     // console.log(id)
+    //     this.$router.push(`/publish?${id}`)
+    //   }
   },
   // 在Vue实例创建完成后调用获取文章列表并渲染到页面
   created () {

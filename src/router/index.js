@@ -7,7 +7,8 @@ import Publish from '@/views/home/publish/publish.vue'
 import Article from '@/views/home/article/article.vue'
 import Comment from '@/views/home/comment/comment.vue'
 import Account from '@/views/home/account/account.vue'
-import Image from '@/views/home/image/image.vue'
+import Media from '../views/home/media'
+import commentDetail from '@/views/home/comment-detail/comment-detail.vue'
 // 引入nprogress
 import NProgress from 'nprogress'
 Vue.use(VueRouter)
@@ -30,6 +31,10 @@ const routes = [
         component: Publish
       },
       {
+        path: '/publish/:articleId',
+        component: Publish
+      },
+      {
         path: '/article',
         component: Article
       },
@@ -38,12 +43,17 @@ const routes = [
         component: Comment
       },
       {
+        path: '/comment/:articleId',
+        component: commentDetail,
+        props: true
+      },
+      {
         path: '/account',
         component: Account
       },
       {
-        path: '/image',
-        component: Image
+        path: '/media',
+        component: Media
       }
     ]
   }
