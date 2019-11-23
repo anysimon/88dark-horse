@@ -17,6 +17,7 @@
           <div class="grid-content bg-purple-light">
             <el-upload
             class="upload-demo"
+            :show-file-list= false
             action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
             :headers="headers"
             :on-success="uploadSuccess"

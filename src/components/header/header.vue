@@ -43,15 +43,25 @@
 </template>
 
 <script>
+import eventBus from '../../units/event-bus.js'
 export default {
+  name: 'headerUser',
   data () {
     return {
       input: '',
-      userInfo: {}
+      userInfo: {
+        photo: '',
+        name: ''
+      }
     }
   },
   created () {
     this.getUserinfo()
+
+    // 在初始化中监听事件
+    eventBus.$on('changeImg', (userInfo, b) => {
+      this.userInfo = userInfo
+    })
   },
 
   methods: {
